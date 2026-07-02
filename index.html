@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>alcaras — Player PoV Thumbnail Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- crossorigin="anonymous" is REQUIRED — without it, html-to-image can't read
+     the @font-face rules during PNG export and the fonts fall back. -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" crossorigin="anonymous">
+<link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- LEFT PANE: live preview -->
+  <section class="preview-pane">
+    <div class="preview-frame" id="previewFrame">
+      <!-- The .thumb is the single source of truth: shown here scaled, exported at native 1280×720. -->
+      <div class="thumb" id="thumb">
+        <img class="thumb__bg" id="thumbBg" src="./assets/backgrounds/sea_exploration.jpg" alt="" crossorigin="anonymous" />
+        <div class="thumb__scrim"></div>
+
+        <img class="thumb__logo" src="./assets/oldworld-logo.png" alt="Old World" crossorigin="anonymous" />
+
+        <!-- Channel-style banner strip: big title + "alcaras v. X, Part N" -->
+        <div class="banner" id="banner">
+          <div class="banner__text">
+            <div class="banner__tag" id="tagLine">Player PoV</div>
+            <div class="banner__title" id="titleLine">Tournament</div>
+            <div class="banner__subtitle" id="subtitleLine">alcaras v. Ninjaa, Part 2</div>
+            <div class="banner__note" id="noteLine" hidden></div>
+          </div>
+          <div class="banner__avatar" id="avatarBox">
+            <img src="./assets/alcaras.png" alt="alcaras avatar" crossorigin="anonymous" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT PANE: controls -->
+  <aside class="controls">
+    <header class="controls__header">
+      <h1>Player PoV Thumbnail</h1>
+      <p class="controls__sub">alcaras · Old World · 1280 × 720</p>
+    </header>
+
+    <section class="ctrl-section">
+      <h2>Match</h2>
+      <div class="row row--gap">
+        <label class="field">
+          <span class="field__label">You</span>
+          <input type="text" id="youInput" value="alcaras" />
+        </label>
+        <label class="field">
+          <span class="field__label">Opponent</span>
+          <input type="text" id="opponentInput" value="Ninjaa" />
+        </label>
+      </div>
+      <div class="row row--gap">
+        <label class="field">
+          <span class="field__label">Part <span class="muted">(blank to hide)</span></span>
+          <input type="text" id="partInput" value="1" />
+        </label>
+        <label class="field">
+          <span class="field__label">Note <span class="muted">(e.g. Round 3 · Match 44)</span></span>
+          <input type="text" id="noteInput" placeholder="Round 3 · Match 44" />
+        </label>
+      </div>
+    </section>
+
+    <section class="ctrl-section">
+      <h2>Text</h2>
+      <label class="field">
+        <span class="field__label">Title line</span>
+        <input type="text" id="titleInput" value="Tournament" />
+      </label>
+      <label class="field">
+        <span class="field__label">Tag <span class="muted">(small caps above title — blank to hide)</span></span>
+        <input type="text" id="tagInput" value="Player PoV" />
+      </label>
+    </section>
+
+    <section class="ctrl-section">
+      <h2>Background</h2>
+      <div class="bg-grid" id="bgGrid"></div>
+    </section>
+
+    <section class="ctrl-section">
+      <h2>Avatar</h2>
+      <label class="field--toggle">
+        <input type="checkbox" id="avatarToggle" checked />
+        Show the lightning avatar on the banner
+      </label>
+    </section>
+
+    <!-- Download -->
+    <section class="ctrl-section ctrl-section--download">
+      <button type="button" class="btn btn--primary" id="downloadBtn">
+        ▼ Download PNG
+      </button>
+      <button type="button" class="btn btn--link" id="resetBtn">Reset everything</button>
+      <p class="hint" id="downloadHint">Saves as &lt;you&gt;-v-&lt;opponent&gt;-part-&lt;n&gt;.png at native 1280 × 720.</p>
+    </section>
+  </aside>
+
+</div>
+
+<!-- html-to-image — used for PNG export only. MIT-licensed, browser-only. -->
+<script src="https://unpkg.com/html-to-image@1.11.13/dist/html-to-image.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
