@@ -1,0 +1,154 @@
+<!-- @dsCard group="Layouts" name="OWCT PoV nameplate" subtitle="Tournament logo · gold medallion · opponent-first inscription" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>OWCT PoV layout — 1280×720</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-navy-deep:    #070d18;
+    --c-parchment-hi: #f5ecd3;
+    --c-gold:         #c9a352;
+    --c-gold-hi:      #e3c477;
+    --c-crimson:      #8c2a33;
+    --f-display: 'Cinzel', 'Trajan Pro', 'Times New Roman', serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--c-navy-deep); }
+  .thumb {
+    position: relative;
+    width: 1280px; height: 720px;
+    overflow: hidden;
+    background: var(--c-navy-deep);
+  }
+  .thumb__bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center 35%;
+  }
+  .thumb__scrim {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg,
+        rgba(7,13,24,0.45) 0%, rgba(7,13,24,0) 26%,
+        rgba(7,13,24,0) 45%, rgba(7,13,24,0.55) 72%, rgba(7,13,24,0.92) 100%);
+  }
+  .thumb__top {
+    position: absolute; top: 30px; left: 0; right: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .thumb__owct-logo {
+    width: 780px; height: auto; display: block;
+    filter: drop-shadow(0 0 20px rgba(231,196,119,0.35))
+            drop-shadow(0 4px 18px rgba(0,0,0,0.7));
+  }
+  .thumb__tournament {
+    font-family: var(--f-display);
+    font-size: 22px; font-weight: 600;
+    color: var(--c-gold-hi);
+    letter-spacing: 0.34em; text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  }
+  .povhero {
+    position: absolute;
+    left: 64px; right: 64px; bottom: 44px;
+    display: flex; align-items: center; gap: 40px;
+  }
+  .povhero__avatar {
+    flex: none;
+    width: 216px; height: 216px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid var(--c-gold);
+    box-shadow:
+      0 0 0 3px rgba(7,13,24,0.85),
+      0 0 0 5px rgba(201,163,82,0.55),
+      0 10px 34px rgba(0,0,0,0.65);
+  }
+  .povhero__avatar img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.32); transform-origin: center 46%; }
+  .povhero__text { flex: 1; min-width: 0; }
+  .povhero__tag {
+    font-family: var(--f-display);
+    font-size: 21px; font-weight: 600;
+    letter-spacing: 0.42em; text-transform: uppercase;
+    color: var(--c-gold-hi);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.85);
+    margin-bottom: 4px;
+  }
+  .povhero__name {
+    font-family: var(--f-display);
+    line-height: 1.0;
+    text-transform: uppercase;
+    color: var(--c-parchment-hi);
+    text-shadow: 0 3px 16px rgba(0,0,0,0.75), 0 0 30px rgba(231,196,119,0.28);
+    white-space: nowrap;
+    display: flex; align-items: baseline; gap: 20px;
+  }
+  .povhero__vs {
+    font-weight: 600; font-size: 44px;
+    color: var(--c-gold-hi);
+    letter-spacing: 0.06em;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+  }
+  .povhero__opp {
+    font-weight: 800; font-size: 104px;
+    overflow-wrap: anywhere;
+  }
+  .povhero__note {
+    display: inline-block;
+    margin-top: 14px; padding: 5px 14px;
+    background: var(--c-crimson);
+    color: var(--c-parchment-hi);
+    font-family: var(--f-display);
+    font-size: 15px; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.55);
+  }
+</style>
+</head>
+<body>
+  <div class="thumb">
+    <img class="thumb__bg" src="assets/bg-fort.jpg" alt="" />
+    <div class="thumb__scrim"></div>
+    <div class="thumb__top">
+      <img class="thumb__owct-logo" src="assets/owct-logo.png" alt="Old World — Empires of the Indus" />
+      <div class="thumb__tournament">Community Tournament 2026</div>
+    </div>
+    <div class="povhero">
+      <div class="povhero__avatar"><img src="assets/alcaras.png" alt="alcaras emblem" /></div>
+      <div class="povhero__text">
+        <div class="povhero__tag">alcaras · PoV</div>
+        <div class="povhero__name"><span class="povhero__vs">vs</span><span class="povhero__opp">A_Modern_Major_General</span></div>
+        <div class="povhero__note">Round 1</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Auto-fit the opponent name: shrink font-size until it fits the row on one line.
+    (function () {
+      function fit() {
+        var row = document.querySelector('.povhero__name');
+        var opp = document.querySelector('.povhero__opp');
+        if (!row || !opp) return;
+        var max = 104, min = 34;
+        opp.style.fontSize = max + 'px';
+        var avail = row.clientWidth;
+        var size = max;
+        // binary-ish shrink until the flex row no longer overflows
+        while (size > min && row.scrollWidth > avail) {
+          size -= 2;
+          opp.style.fontSize = size + 'px';
+        }
+      }
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(fit);
+      }
+      window.addEventListener('load', fit);
+      fit();
+    })();
+  </script>
+</body>
+</html>

@@ -85,6 +85,19 @@ function fitText(el, { base, min = 18 } = {}) {
   el.style.fontSize = Math.max(min, Math.floor(base * (avail / naturalWidth) * 0.98)) + 'px';
 }
 
+// Step-fit for the OWCT name row (from the claude.ai/design handoff):
+// shrink the opponent name in 2px steps until the flex row — including the
+// gold "vs" prefix — no longer overflows.
+function fitNameRow(row, opp, { max = 104, min = 34 } = {}) {
+  if (!row || row.clientWidth === 0) return;
+  opp.style.fontSize = max + 'px';
+  let size = max;
+  while (size > min && row.scrollWidth > row.clientWidth) {
+    size -= 2;
+    opp.style.fontSize = size + 'px';
+  }
+}
+
 // Safe filename fragment.
 const safeName = s => (s || 'player').replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '') || 'player';
 
@@ -105,9 +118,10 @@ const refs = {
   // OWCT-PoV layout
   tournamentLine: $('#tournamentLine'),
   hudAvatar:    $('#hudAvatar'),
+  hudNameRow:   $('#hudNameRow'),
+  hudVsWord:    $('#hudVsWord'),
   hudName1:     $('#hudName1'),
   povTag:       $('#povTag'),
-  hudVs:        $('#hudVs'),
   roundBadge:   $('#roundBadge'),
   layoutPicker: $('#layoutPicker'),
   ctrls: {
@@ -156,14 +170,14 @@ function render() {
     const opp = (state.opponent || '').trim();
 
     refs.povTag.textContent = [you, tag].filter(Boolean).join(' · ');
-    refs.hudName1.textContent = opp ? `vs ${opp}` : you;
-    fitText(refs.hudName1, { base: 104, min: 44 });
+    refs.hudVsWord.hidden = opp === '';
+    refs.hudName1.textContent = opp || you;
+    fitNameRow(refs.hudNameRow, refs.hudName1);
 
-    refs.hudVs.textContent = part ? `Part ${part}` : '';
-    fitText(refs.hudVs, { base: 38, min: 20 });
-
-    refs.roundBadge.textContent = note;
-    refs.roundBadge.hidden = note === '';
+    // One chip carries both round and part: "Round 3 · Match 44 · Part 2".
+    const chip = [note, part ? `Part ${part}` : ''].filter(Boolean).join(' · ');
+    refs.roundBadge.textContent = chip;
+    refs.roundBadge.hidden = chip === '';
 
     refs.hudAvatar.hidden = !state.showAvatar;
   } else {
