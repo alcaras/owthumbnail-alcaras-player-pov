@@ -31,28 +31,19 @@
           <div class="thumb__tournament" id="tournamentLine">Community Tournament 2026</div>
         </div>
 
-        <!-- OWCT layout: gold VS HUD, PoV-ified — alcaras' side runs electric -->
-        <div class="hud" id="hud">
-          <div class="cell cell--left cell--pov">
-            <div class="cell__avatar" id="hudAvatar">
-              <img src="./assets/alcaras.png" alt="alcaras avatar" crossorigin="anonymous" />
-            </div>
-            <div class="cell__text">
-              <div class="cell__name" id="hudName1">alcaras</div>
-              <div class="cell__civ cell__civ--pov" id="hudTag1">› Player PoV</div>
-            </div>
-          </div>
+        <!-- OWCT-PoV layout: electric storm wash cooling the whole scene -->
+        <div class="thumb__povwash"></div>
 
-          <div class="hud__vs">
-            <div class="hud__vs-text">VS</div>
-            <div class="hud__round" id="roundBadge" hidden></div>
+        <!-- OWCT-PoV layout: first-person hero block — you huge, opponent subordinate -->
+        <div class="povhero">
+          <div class="povhero__avatar" id="hudAvatar">
+            <img src="./assets/alcaras.png" alt="alcaras avatar" crossorigin="anonymous" />
           </div>
-
-          <div class="cell cell--right">
-            <div class="cell__text">
-              <div class="cell__name" id="hudName2">Ninjaa</div>
-              <div class="cell__civ" id="hudPart2"></div>
-            </div>
+          <div class="povhero__text">
+            <div class="povhero__tag" id="povTag">Player PoV</div>
+            <div class="povhero__name" id="hudName1">alcaras</div>
+            <div class="povhero__vs" id="hudVs">vs Ninjaa · Part 1</div>
+            <div class="povhero__note" id="roundBadge" hidden></div>
           </div>
         </div>
 
@@ -88,8 +79,8 @@
           <span class="layout-chip__desc">Big title strip, avatar right</span>
         </button>
         <button type="button" class="layout-chip" data-layout="owct">
-          <span class="layout-chip__name">OWCT 2026</span>
-          <span class="layout-chip__desc">Tournament logo + VS HUD, PoV side electric</span>
+          <span class="layout-chip__name">OWCT 2026 PoV</span>
+          <span class="layout-chip__desc">Tournament logo, gold medallion + hero nameplate</span>
         </button>
       </div>
     </section>

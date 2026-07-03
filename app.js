@@ -102,13 +102,12 @@ const refs = {
   noteLine:     $('#noteLine'),
   avatarBox:    $('#avatarBox'),
   bgGrid:       $('#bgGrid'),
-  // OWCT layout
+  // OWCT-PoV layout
   tournamentLine: $('#tournamentLine'),
   hudAvatar:    $('#hudAvatar'),
   hudName1:     $('#hudName1'),
-  hudTag1:      $('#hudTag1'),
-  hudName2:     $('#hudName2'),
-  hudPart2:     $('#hudPart2'),
+  povTag:       $('#povTag'),
+  hudVs:        $('#hudVs'),
   roundBadge:   $('#roundBadge'),
   layoutPicker: $('#layoutPicker'),
   ctrls: {
@@ -148,16 +147,17 @@ function render() {
   const part = (state.part || '').trim();
 
   if (owct) {
-    // OWCT layout — tournament caption + VS HUD.
+    // OWCT-PoV layout — tournament caption + first-person hero nameplate.
     refs.tournamentLine.textContent = (state.tournament || '').trim();
 
+    refs.povTag.textContent = tag;
     refs.hudName1.textContent = (state.you || '').trim();
-    refs.hudName2.textContent = (state.opponent || '').trim();
-    fitText(refs.hudName1, { base: 60, min: 18 });
-    fitText(refs.hudName2, { base: 60, min: 18 });
+    fitText(refs.hudName1, { base: 104, min: 44 });
 
-    refs.hudTag1.textContent = tag ? `› ${tag}` : '';
-    refs.hudPart2.textContent = part ? `Part ${part} ‹` : '';
+    const opp = (state.opponent || '').trim();
+    refs.hudVs.textContent =
+      (opp ? `vs ${opp}` : '') + (part ? `${opp ? ' · ' : ''}Part ${part}` : '');
+    fitText(refs.hudVs, { base: 38, min: 20 });
 
     refs.roundBadge.textContent = note;
     refs.roundBadge.hidden = note === '';
