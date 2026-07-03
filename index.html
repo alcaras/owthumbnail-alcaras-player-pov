@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- crossorigin="anonymous" is REQUIRED — without it, html-to-image can't read
      the @font-face rules during PNG export and the fonts fall back. -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" crossorigin="anonymous">
 <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
@@ -24,6 +24,37 @@
         <div class="thumb__scrim"></div>
 
         <img class="thumb__logo" src="./assets/oldworld-logo.png" alt="Old World" crossorigin="anonymous" />
+
+        <!-- OWCT layout: tournament logo + caption, centered like the caster generator -->
+        <div class="thumb__top" id="owctTop">
+          <img class="thumb__owct-logo" src="./assets/owct-logo.png" alt="OWCT logo" crossorigin="anonymous" />
+          <div class="thumb__tournament" id="tournamentLine">Community Tournament 2026</div>
+        </div>
+
+        <!-- OWCT layout: gold VS HUD, PoV-ified — alcaras' side runs electric -->
+        <div class="hud" id="hud">
+          <div class="cell cell--left cell--pov">
+            <div class="cell__avatar" id="hudAvatar">
+              <img src="./assets/alcaras.png" alt="alcaras avatar" crossorigin="anonymous" />
+            </div>
+            <div class="cell__text">
+              <div class="cell__name" id="hudName1">alcaras</div>
+              <div class="cell__civ cell__civ--pov" id="hudTag1">› Player PoV</div>
+            </div>
+          </div>
+
+          <div class="hud__vs">
+            <div class="hud__vs-text">VS</div>
+            <div class="hud__round" id="roundBadge" hidden></div>
+          </div>
+
+          <div class="cell cell--right">
+            <div class="cell__text">
+              <div class="cell__name" id="hudName2">Ninjaa</div>
+              <div class="cell__civ" id="hudPart2"></div>
+            </div>
+          </div>
+        </div>
 
         <!-- Channel-style banner strip: big title + "alcaras v. X, Part N" -->
         <div class="banner" id="banner">
@@ -48,6 +79,20 @@
       <h1>Player PoV Thumbnail</h1>
       <p class="controls__sub">alcaras · Old World · 1280 × 720</p>
     </header>
+
+    <section class="ctrl-section">
+      <h2>Layout</h2>
+      <div class="layout-picker" id="layoutPicker">
+        <button type="button" class="layout-chip" data-layout="channel">
+          <span class="layout-chip__name">Channel banner</span>
+          <span class="layout-chip__desc">Big title strip, avatar right</span>
+        </button>
+        <button type="button" class="layout-chip" data-layout="owct">
+          <span class="layout-chip__name">OWCT 2026</span>
+          <span class="layout-chip__desc">Tournament logo + VS HUD, PoV side electric</span>
+        </button>
+      </div>
+    </section>
 
     <section class="ctrl-section">
       <h2>Match</h2>
@@ -82,6 +127,10 @@
       <label class="field">
         <span class="field__label">Tag <span class="muted">(small caps above title — blank to hide)</span></span>
         <input type="text" id="tagInput" value="Player PoV" />
+      </label>
+      <label class="field">
+        <span class="field__label">Tournament line <span class="muted">(OWCT layout only)</span></span>
+        <input type="text" id="tournamentInput" value="Community Tournament 2026" />
       </label>
     </section>
 

@@ -35,12 +35,14 @@ const bgPath = slug => `./assets/backgrounds/${slug}.jpg`;
 const LS_KEY = 'alcaras-pov-thumb-v1';
 
 const DEFAULT_STATE = {
+  layout: 'channel', // 'channel' = big banner strip · 'owct' = tournament logo + VS HUD
   you: 'alcaras',
   opponent: 'Ninjaa',
   part: '1',        // blank = hidden
-  note: '',         // e.g. "Round 3 · Match 44" — blank = hidden
+  note: '',         // channel: small line under subtitle · owct: crimson round pill under VS
   title: 'Tournament',
-  tag: 'Player PoV',// blank = hidden
+  tag: 'Player PoV',// channel: caps above title · owct: cyan tag under your name. Blank = hidden.
+  tournament: 'Community Tournament 2026', // owct caption line
   background: 'sea_exploration',
   showAvatar: true,
 };
@@ -48,13 +50,20 @@ const DEFAULT_STATE = {
 let state = loadState();
 
 function loadState() {
+  let s;
   try {
     const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return structuredClone(DEFAULT_STATE);
-    return { ...structuredClone(DEFAULT_STATE), ...JSON.parse(raw) };
+    s = raw ? { ...structuredClone(DEFAULT_STATE), ...JSON.parse(raw) } : structuredClone(DEFAULT_STATE);
   } catch {
-    return structuredClone(DEFAULT_STATE);
+    s = structuredClone(DEFAULT_STATE);
   }
+  // URL overrides (shareable/bookmarkable): ?layout=owct&background=fort
+  const params = new URLSearchParams(location.search);
+  const layout = params.get('layout');
+  if (layout === 'channel' || layout === 'owct') s.layout = layout;
+  const bg = params.get('background');
+  if (bg && BACKGROUNDS.some(b => b.slug === bg)) s.background = bg;
+  return s;
 }
 
 function saveState() {
@@ -93,6 +102,15 @@ const refs = {
   noteLine:     $('#noteLine'),
   avatarBox:    $('#avatarBox'),
   bgGrid:       $('#bgGrid'),
+  // OWCT layout
+  tournamentLine: $('#tournamentLine'),
+  hudAvatar:    $('#hudAvatar'),
+  hudName1:     $('#hudName1'),
+  hudTag1:      $('#hudTag1'),
+  hudName2:     $('#hudName2'),
+  hudPart2:     $('#hudPart2'),
+  roundBadge:   $('#roundBadge'),
+  layoutPicker: $('#layoutPicker'),
   ctrls: {
     you:      $('#youInput'),
     opponent: $('#opponentInput'),
@@ -100,6 +118,7 @@ const refs = {
     note:     $('#noteInput'),
     title:    $('#titleInput'),
     tag:      $('#tagInput'),
+    tournament: $('#tournamentInput'),
     avatar:   $('#avatarToggle'),
   },
 };
@@ -116,25 +135,53 @@ function subtitleText() {
 }
 
 function render() {
+  const owct = state.layout === 'owct';
+  refs.thumb.classList.toggle('thumb--owct', owct);
+
   // Background
   const bgFile = bgPath(BACKGROUNDS.some(b => b.slug === state.background)
     ? state.background : DEFAULT_STATE.background);
   if (!refs.thumbBg.src.endsWith(bgFile.slice(1))) refs.thumbBg.src = bgFile;
 
-  // Text lines
-  refs.tagLine.textContent = (state.tag || '').trim();
-  refs.titleLine.textContent = (state.title || '').trim();
-  refs.subtitleLine.textContent = subtitleText();
-
   const note = (state.note || '').trim();
-  refs.noteLine.textContent = note;
-  refs.noteLine.hidden = note === '';
+  const tag = (state.tag || '').trim();
+  const part = (state.part || '').trim();
 
-  fitText(refs.titleLine, { base: 76, min: 34 });
-  fitText(refs.subtitleLine, { base: 42, min: 20 });
+  if (owct) {
+    // OWCT layout — tournament caption + VS HUD.
+    refs.tournamentLine.textContent = (state.tournament || '').trim();
 
-  // Avatar
-  refs.avatarBox.hidden = !state.showAvatar;
+    refs.hudName1.textContent = (state.you || '').trim();
+    refs.hudName2.textContent = (state.opponent || '').trim();
+    fitText(refs.hudName1, { base: 60, min: 18 });
+    fitText(refs.hudName2, { base: 60, min: 18 });
+
+    refs.hudTag1.textContent = tag ? `› ${tag}` : '';
+    refs.hudPart2.textContent = part ? `Part ${part} ‹` : '';
+
+    refs.roundBadge.textContent = note;
+    refs.roundBadge.hidden = note === '';
+
+    refs.hudAvatar.hidden = !state.showAvatar;
+  } else {
+    // Channel layout — banner strip.
+    refs.tagLine.textContent = tag;
+    refs.titleLine.textContent = (state.title || '').trim();
+    refs.subtitleLine.textContent = subtitleText();
+
+    refs.noteLine.textContent = note;
+    refs.noteLine.hidden = note === '';
+
+    fitText(refs.titleLine, { base: 76, min: 34 });
+    fitText(refs.subtitleLine, { base: 42, min: 20 });
+
+    refs.avatarBox.hidden = !state.showAvatar;
+  }
+
+  // Layout picker selected state
+  refs.layoutPicker.querySelectorAll('.layout-chip').forEach(chip => {
+    chip.classList.toggle('is-selected', chip.dataset.layout === state.layout);
+  });
 
   // Background grid selected state
   refs.bgGrid.querySelectorAll('.bg-chip').forEach(chip => {
@@ -198,11 +245,19 @@ function wireInputs() {
   bind(refs.ctrls.note, 'note');
   bind(refs.ctrls.title, 'title');
   bind(refs.ctrls.tag, 'tag');
+  bind(refs.ctrls.tournament, 'tournament');
 
   refs.ctrls.avatar.checked = state.showAvatar;
   refs.ctrls.avatar.addEventListener('change', e => {
     state.showAvatar = e.target.checked;
     render();
+  });
+
+  refs.layoutPicker.querySelectorAll('.layout-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      state.layout = chip.dataset.layout;
+      render();
+    });
   });
 }
 
@@ -303,6 +358,7 @@ function wireDefaults() {
   refs.ctrls.note.value = state.note;
   refs.ctrls.title.value = state.title;
   refs.ctrls.tag.value = state.tag;
+  refs.ctrls.tournament.value = state.tournament;
   refs.ctrls.avatar.checked = state.showAvatar;
 }
 

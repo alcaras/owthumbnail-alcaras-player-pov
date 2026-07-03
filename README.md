@@ -11,6 +11,18 @@ background, translucent banner with a big title over
 lightning avatar and glowing banner hairlines, so PoV videos are
 recognizable at feed size regardless of which nation is being played.
 
+## Layouts
+
+- **Channel banner** — the channel's classic strip: big title over
+  "alcaras v. Opponent, Part N", lightning avatar breaking out on the right.
+- **OWCT 2026** — mirrors the official tournament generator (Empires of the
+  Indus logo, tournament caption, gold VS HUD) but PoV-ified: your cell gets
+  the electric avatar ring and a cyan "› Player PoV" tag, the opponent side
+  stays tournament-gold. Note field becomes the crimson round pill under VS;
+  Part shows under the opponent's name.
+
+Both honor `?layout=` and `?background=` URL params for bookmarking.
+
 ## Fields
 
 - **You / Opponent / Part** — composed into "alcaras v. Ninjaa, Part 2".
