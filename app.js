@@ -41,7 +41,7 @@ const DEFAULT_STATE = {
   part: '1',        // blank = hidden
   note: '',         // channel: small line under subtitle · owct: crimson round pill under VS
   title: 'Tournament',
-  tag: 'Player PoV',// channel: caps above title · owct: cyan tag under your name. Blank = hidden.
+  tag: 'PoV',       // channel: caps above title · owct: joined into "you · tag" eyebrow. Blank = hidden.
   tournament: 'Community Tournament 2026', // owct caption line
   background: 'sea_exploration',
   showAvatar: true,
@@ -58,6 +58,8 @@ function loadState() {
     s = structuredClone(DEFAULT_STATE);
   }
   // URL overrides (shareable/bookmarkable): ?layout=owct&background=fort
+  // Migrate the pre-handoff default so saved states pick up the shorter tag.
+  if (s.tag === 'Player PoV') s.tag = 'PoV';
   const params = new URLSearchParams(location.search);
   const layout = params.get('layout');
   if (layout === 'channel' || layout === 'owct') s.layout = layout;
