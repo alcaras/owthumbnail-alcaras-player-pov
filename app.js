@@ -150,13 +150,16 @@ function render() {
     // OWCT-PoV layout — tournament caption + first-person hero nameplate.
     refs.tournamentLine.textContent = (state.tournament || '').trim();
 
-    refs.povTag.textContent = tag;
-    refs.hudName1.textContent = (state.you || '').trim();
+    // On the player's own channel every video is theirs — the opponent is
+    // the distinguishing news, so THEY get the big inscription.
+    const you = (state.you || '').trim();
+    const opp = (state.opponent || '').trim();
+
+    refs.povTag.textContent = [you, tag].filter(Boolean).join(' · ');
+    refs.hudName1.textContent = opp ? `vs ${opp}` : you;
     fitText(refs.hudName1, { base: 104, min: 44 });
 
-    const opp = (state.opponent || '').trim();
-    refs.hudVs.textContent =
-      (opp ? `vs ${opp}` : '') + (part ? `${opp ? ' · ' : ''}Part ${part}` : '');
+    refs.hudVs.textContent = part ? `Part ${part}` : '';
     fitText(refs.hudVs, { base: 38, min: 20 });
 
     refs.roundBadge.textContent = note;
